@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import styles from './styles';
 import { firebase } from '../../firebase/config'
+import { useNavigation } from '@react-navigation/native';
 import { firestore} from '@react-native-firebase/app'
 import {BuscaCEP} from '../../utils/CepPromise/BuscaCEP01.js';
 
 
 export default function HomeScreen(props) {
-
+    const navigation =  useNavigation()
     const [entityText, setEntityText] = useState('')
     const [entities, setEntities] = useState([])
 
@@ -39,9 +40,6 @@ export default function HomeScreen(props) {
             // Stop listening for updates when no longer required
             return () => subscriber();
     }, [userID])
-
-
-
 
     const onAddButtonPress = () => {
         if (entityText && entityText.length > 0) {
@@ -76,6 +74,10 @@ export default function HomeScreen(props) {
         )
     }
 
+    const handleNavigateToFindCep = useCallback(()=>{
+        navigation.navigate('CepScreen')
+    },[])
+
     return (
         <View style={styles.container}>
             <View style={styles.formContainer}>
@@ -102,7 +104,7 @@ export default function HomeScreen(props) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <TouchableOpacity  style={styles.button} >
+                <TouchableOpacity  style={styles.button} onPress={handleNavigateToFindCep}>
                     <Text style={styles.buttonText}>Buscar</Text>
                 
                 </TouchableOpacity>

@@ -5,6 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 //import styles from './styles';
 //import { firebase } from '../../firebase/config'
 //import {BuscaCEP} from '../../utils/CepPromise/BuscaCEP.js';
+axios
 
 export default class BuscaCep extends Component{
 
