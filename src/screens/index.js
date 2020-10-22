@@ -1,4 +1,4 @@
-export { default as LoginScreen } from './LoginScreen/LoginScreen'
-export { default as HomeScreen } from './HomeScreen/HomeScreen'
-export { default as RegistrationScreen } from './RegistrationScreen/RegistrationScreen'
-export { default as CepScreen } from './CepScreen/CepScreen'
+export { default as LoginScreen } from './LoginScreen/'
+export { default as HomeScreen } from './HomeScreen/'
+export { default as RegistrationScreen } from './RegistrationScreen/'
+export { default as CepScreen } from './CepScreen/'

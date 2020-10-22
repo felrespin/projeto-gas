@@ -1,19 +1,29 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
+import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Modal } from 'react-native'
 import styles from './styles';
 import { firebase } from '../../firebase/config'
 import { useNavigation } from '@react-navigation/native';
-import { firestore} from '@react-native-firebase/app'
+import { firestore } from '@react-native-firebase/app'
 import {BuscaCEP} from '../../utils/CepPromise/BuscaCEP01.js';
-
+import {} from '@expo/vector-icons/Feather'
+import Icon from '@expo/vector-icons/FontAwesome5'
+import Picker from 'react-native-picker-select';
+'@react-native-modal'
 
 export default function HomeScreen(props) {
     const navigation =  useNavigation()
     const [entityText, setEntityText] = useState('')
     const [entities, setEntities] = useState([])
+    const modalRef = useRef(false)
+    const [isModal, setIsModal] = useState(false)
 
     const [buscaCep, setBuscaCep] = useState('')
     
+    const fp =[
+        {label: 'dinheiro', value:'1'},
+        {label: 'cartao credito', value:'2'},
+        {label: 'cartao debito', value:'3'}
+    ]
 
     const entityRef = firebase.firestore().collection('entities')
     const userID = props.extraData.id
@@ -75,52 +85,76 @@ export default function HomeScreen(props) {
     }
 
     const handleNavigateToFindCep = useCallback(()=>{
+        //setIsModal(true)
         navigation.navigate('CepScreen')
     },[])
 
     return (
-        <View style={styles.container}>
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Faça novo pedido'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setEntityText(text)}
-                    value={entityText}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
-                    <Text style={styles.buttonText}>Add</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Digite seu Cep'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setBuscaCep(text)}
-                    value={setBuscaCep}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TouchableOpacity  style={styles.button} onPress={handleNavigateToFindCep}>
-                    <Text style={styles.buttonText}>Buscar</Text>
+        <>
+        {isModal ? (
+            <Modal ref={modalRef} visible={isModal} transparent={!isModal}>
+                <View style={{flex:1,backgroundColor:'#FFf', margin:'10%', justifyContent:'center', alignItems:'center'}}>
                 
+                <Picker 
+                    onValueChange={(value) => alert(value)}
+                    items={fp}
+                />
+
+                <TouchableOpacity onPress={()=>setIsModal(false)}>
+                    <Text>Fechar modal</Text>
                 </TouchableOpacity>
-                
-            </View>
-            { entities && (
-                <View style={styles.listContainer}>
-                    <FlatList
-                        data={entities}
-                        renderItem={renderEntity}
-                        keyExtractor={(item) => item.id}
-                        removeClippedSubviews={true}
-                    />
+
+
+                <Icon name="arrow-left" size={30} />
                 </View>
-            )}
+            </Modal>
+          ):(
+            <View style={styles.container}>
+                <View style={styles.formContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Faça novo pedido'
+                        placeholderTextColor="#aaaaaa"
+                        onChangeText={(text) => setEntityText(text)}
+                        value={entityText}
+                        underlineColorAndroid="transparent"
+                        autoCapitalize="none"
+                    />
+                    <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
+                        <Text style={styles.buttonText}>Add</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.formContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Digite seu Cep'
+                        placeholderTextColor="#aaaaaa"
+                        onChangeText={(text) => setBuscaCep(text)}
+                        value={setBuscaCep}
+                        underlineColorAndroid="transparent"
+                        autoCapitalize="none"
+                    />
+                    <TouchableOpacity  style={styles.button} onPress={handleNavigateToFindCep}>
+                        <Text style={styles.buttonText}>Buscar</Text>
+                    
+                    </TouchableOpacity>
+                    
+                </View>
+                { entities && (
+                    <View style={styles.listContainer}>
+                        <FlatList
+                            data={entities}
+                            renderItem={renderEntity}
+                            keyExtractor={(item) => item.id}
+                            removeClippedSubviews={true}
+                        />
+                    </View>
+                )}
             
-        </View>
+            </View>
+          )
+                }
+        </>
+      
     )
 }

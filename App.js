@@ -1,12 +1,14 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react'
+import {View } from 'react-native'
 import { firebase } from './src/firebase/config'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import LoginScreen from './LoginScreen'
-import HomeScreen from './HomeScreen'
-import RegistrationScreen from './RegistrationScreen'
-import CepScreen from './CepScreen'
+
+import LoginScreen from './src/screens/LoginScreen'
+import HomeScreen from './src/screens/HomeScreen'
+import RegistrationScreen from './src/screens/RegistrationScreen'
+import CepScreen from './src/screens/CepScreen'
 
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
@@ -23,6 +25,10 @@ export default function App() {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
+    login()
+  }, []);
+
+  async function login (){
     const usersRef = firebase.firestore().collection('users');
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -41,7 +47,7 @@ export default function App() {
         setLoading(false)
       }
     });
-  }, []);
+  }
 
   if (loading) {
     return (
@@ -49,10 +55,11 @@ export default function App() {
     )
   }
 
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        { user ? (
+        { !!user ? (
           <>
             <Stack.Screen name="Home">
               {props => <HomeScreen {...props} extraData={user} />}

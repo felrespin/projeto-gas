@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 //import styles from './styles';
 //import { firebase } from '../../firebase/config'
 //import {BuscaCEP} from '../../utils/CepPromise/BuscaCEP.js';
-axios
+
 
 export default class BuscaCep extends Component{
 
@@ -46,15 +46,15 @@ export default class BuscaCep extends Component{
       Buscar meu CEP:
       </Text>
        <TextInput
-       value={this.state.cep}
-       onChangeText={cep => {this.setState({cep})}}
-      style={styles.input}
-      placeholder='Digite o seu CEP'
-      placeholderTextColor='#c3c3c3'
+        value={this.state.cep}
+        onChangeText={cep => {this.setState({cep})}}
+        style={styles.input}
+        placeholder='Digite o seu CEP'
+        placeholderTextColor='#c3c3c3'
       />
       <TouchableOpacity
-      style={styles.button}
-      onPress={this.buscarCep}
+        style={styles.button}
+        onPress={this.buscarCep}
        >
         <Text>
           Buscar
@@ -63,20 +63,31 @@ export default class BuscaCep extends Component{
         {
           this.state.dados.localidade ? <View>
         
-        
+        {/*duplicar essa view trocando os values*/}
 
+        <View style={{flexDirection:'row', alignItems:'center'}}>
+          <Text style={{backgroundColor:'blue', fontSize:18}}>Estado</Text>
+          <TextInput
+              value={this.state.dados.uf}
+              onChangeText={uf => {this.setState({uf})}}
+              style={{backgroundColor:'red', marginLeft:'8%' ,flex:1}}
+              placeholder='Digite o seu Estado'
+              placeholderTextColor='#c3c3c3'
+            />
+        </View>  
+   
         <Text>
- Estado: {this.state.dados.uf}
-      </Text>
+          Estado: {this.state.dados.uf}
+        </Text>
         
         <Text>
-    Cidade: {this.state.dados.localidade}
+          Cidade: {this.state.dados.localidade}
         </Text>
         <Text>
-     Bairro: {this.state.dados.bairro}
+          Bairro: {this.state.dados.bairro}
         </Text>
         <Text>
-     Rua: {this.state.dados.logradouro}
+          Rua: {this.state.dados.logradouro}
         </Text>
         
         </View> : null
